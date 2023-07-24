@@ -1,6 +1,5 @@
 package com.example.movieapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -42,38 +41,39 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp{
-                MainContent()
+            MovieAppTheme {
+                MyApp()
             }
         }
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyApp(content: @Composable () -> Unit){
-    MovieAppTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(
+fun MyApp(){
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
                         text = "Movies",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
-                    ) },
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor= Color.Magenta
                     )
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Magenta
                 )
-                }
-
-        ){
-            content()
+            )
         }
-            }
 
+    ) {
+        Surface(modifier = Modifier.padding(it)) {
+            MainContent()
+        }
+    }
 }
+
 
 @Composable
 fun MainContent(
@@ -85,14 +85,15 @@ fun MainContent(
         "Harry Potter",
         "IMAX"
     )
-){
-    Column(modifier = Modifier
-        .padding(12.dp)
-        .fillMaxSize()
+) {
+    Column(
+        modifier = Modifier
+            .padding(12.dp)
+            .fillMaxSize()
     ) {
-        LazyColumn{
-            items(items = movieList){
-                MovieRow(movie = it){ movie->
+        LazyColumn {
+            items(items = movieList) {
+                MovieRow(movie = it) { movie ->
                     Log.d("Movie", "MainContent: $movie")
                 }
             }
@@ -103,7 +104,7 @@ fun MainContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}){
+fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
     Card(modifier = Modifier
         .padding(4.dp)
         .fillMaxWidth()
@@ -118,26 +119,26 @@ fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}){
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Surface(modifier = Modifier
-                .padding(12.dp)
-                .size(100.dp),
-            shape = RectangleShape,
-            shadowElevation = 4.dp) {
+            Surface(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(100.dp),
+                shape = RectangleShape,
+                shadowElevation = 4.dp
+            ) {
                 Icon(
                     imageVector = Icons.Rounded.AccountBox,
                     contentDescription = "Movie Image"
                 )
 
             }
-            Text(text = movie) }
+            Text(text = movie)
+        }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MyApp {
-        MainContent()
-    }
+    MainContent()
 }
