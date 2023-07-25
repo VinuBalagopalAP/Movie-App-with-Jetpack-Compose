@@ -31,7 +31,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.movieapp.model.Movie
+import com.example.movieapp.model.getMovies
 import com.example.movieapp.navigaion.MovieScreen
+import com.example.movieapp.widgets.MovieRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,16 +46,9 @@ fun HomeScreen(navController: NavController) {
                     Text(
                         text = "Movies",
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Magenta
-                )
-            )
-        }
-
-    ) {
+                        overflow = TextOverflow.Ellipsis)},
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Magenta))
+        }) {
         Surface(modifier = Modifier.padding(it)) {
             MainContent(navController = navController)
         }
@@ -63,14 +59,7 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun MainContent(
     navController: NavController,
-    movieList: List<String> = listOf(
-        "Avatar",
-        "300",
-        "Barbie",
-        "KGF",
-        "Harry Potter",
-        "IMAX"
-    )
+    movieList: List<Movie> = getMovies()
 ) {
     Column(
         modifier = Modifier
@@ -89,37 +78,3 @@ fun MainContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
-    Card(modifier = Modifier
-        .padding(4.dp)
-        .fillMaxWidth()
-        .height(130.dp),
-        shape = RoundedCornerShape(corner = CornerSize(16.dp)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-        onClick = {
-            onItemClick(movie)
-        }
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Surface(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .size(100.dp),
-                shape = RectangleShape,
-                shadowElevation = 4.dp
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.AccountBox,
-                    contentDescription = "Movie Image"
-                )
-
-            }
-            Text(text = movie)
-        }
-    }
-}
